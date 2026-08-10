@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: kantar
+    schema: public
+    database: kantar_analytics
+    tables:
+      - name: audience_15min_raw
+
+models:
+  - name: stg_kantar_audience
+    description: "Staging da audiência bruta do Kantar, com colunas padronizadas e tipadas."
+    columns:
+      - name: broadcaster
+        description: "Nome da emissora ou 'TOTAL LIGADOS' como referência."
+        tests:
+          - not_null
+      - name: rating_pct
+        description: "Rat# (audiência absoluta) do target naquela faixa horária."
+        tests:
+          - not_null
+      - name: date
+        description: "Data da medição."
+        tests:
+          - not_null

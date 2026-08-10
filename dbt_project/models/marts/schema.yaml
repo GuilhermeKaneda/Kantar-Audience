@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: mart_audience_share
+    description: "Share calculado por emissora, praça, data e faixa horária, comparado ao total ligados."
+    config:
+      materialized: incremental
+      unique_key:
+        - broadcaster
+        - market
+        - date
+        - time_slot
+    columns:
+      - name: broadcaster
+        tests:
+          - not_null
+      - name: market
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: time_slot
+        tests:
+          - not_null
+      - name: share
+        tests:
+          - not_null
