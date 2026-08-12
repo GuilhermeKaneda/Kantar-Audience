@@ -109,7 +109,6 @@ dag = DAG(
     schedule=None,
     start_date=datetime(2026, 1, 1),
     catchup=False,
-    is_paused_upon_creation=False,
 )
 
 select = PythonOperator(
