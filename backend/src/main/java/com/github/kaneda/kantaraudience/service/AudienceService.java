@@ -29,29 +29,33 @@ public class AudienceService {
     public List<String> findDistinctMarket() {
         return repository.findDistinctMarket();
     }
-
+ 
     @Cacheable("distinctBroadcasters")
     public List<String> findDistinctBroadcaster() {
         return repository.findDistinctBroadcaster();
     }
-
+ 
     @Cacheable("distinctWeekDays")
     public List<String> findDistinctWeekDay() {
         return repository.findDistinctWeekDay();
     }
-
+ 
+    @Cacheable("avgRatingAndShareByBroadcaster")
     public List<AvgByBroadcaster> findAvgRatingAndShareByBroadcaster(String[] broadcaster, String[] market, LocalDate startDate, LocalDate endDate) {
         return repository.findAvgRatingAndShareByBroadcaster(broadcaster, market, startDate, endDate);
     }
-
+ 
+    @Cacheable("avgRatingAndSharePerDay")
     public List<AvgMetricsPerDay> findAvgRatingAndSharePerDay(LocalDate startDate, LocalDate endDate, String[] broadcaster, String[] market) {
         return repository.findAvgRatingAndSharePerDay(startDate, endDate, broadcaster, market);
     }
-
+ 
+    @Cacheable("avgRatingAndSharePerTimeSlot")
     public List<AvgMetricsPerTimeSlot> findAvgRatingAndSharePerTimeSlot(String[] broadcaster, String[] market, LocalDate startDate, LocalDate endDate) {
         return repository.findAvgRatingAndSharePerTimeSlot(broadcaster, market, startDate, endDate);
     }
-
+ 
+    @Cacheable("avgRatingAndSharePerWeekDay")
     public List<AvgMetricsPerWeekDay> findAvgRatingAndSharePerWeekDay(String[] broadcaster, String[] market, String[] weekDay, LocalDate startDate, LocalDate endDate) {
         return repository.findAvgRatingAndSharePerWeekDay(broadcaster, market, weekDay, startDate, endDate);
     }

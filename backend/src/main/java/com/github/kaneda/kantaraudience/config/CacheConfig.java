@@ -16,10 +16,17 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("distinctMarkets", "distinctBroadcasters", "distinctWeekDays");
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("distinctMarkets", "distinctBroadcasters", "distinctWeekDays", "avgRatingAndShareByBroadcaster", "avgRatingAndSharePerDay", "avgRatingAndSharePerTimeSlot", "avgRatingAndSharePerWeekDay");
 
-        // 1 dia para expirar o cache
-        cacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).maximumSize(500));
+        // O tamanho do cache é o número de combinacões possíveis de parâmetros para cada consulta
+        cacheManager.registerCustomCache("distinctMarkets", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).maximumSize(10).build());
+        cacheManager.registerCustomCache("distinctBroadcasters", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).maximumSize(10).build());
+        cacheManager.registerCustomCache("distinctWeekDays", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).maximumSize(10).build());
+
+        cacheManager.registerCustomCache("avgRatingAndShareByBroadcaster", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).maximumSize(500).build());
+        cacheManager.registerCustomCache("avgRatingAndSharePerDay", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).maximumSize(500).build());
+        cacheManager.registerCustomCache("avgRatingAndSharePerTimeSlot", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).maximumSize(500).build());
+        cacheManager.registerCustomCache("avgRatingAndSharePerWeekDay", Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).maximumSize(1000).build());
 
         return cacheManager;
     }
