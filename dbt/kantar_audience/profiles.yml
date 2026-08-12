@@ -1,0 +1,12 @@
+kantar_audience:
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      port: 5432
+      dbname: kantar_analytics
+      schema: public
+      user: analytics
+      password: "{{ env_var('DBT_PG_PASSWORD') }}"
+      threads: 2
+  target: dev

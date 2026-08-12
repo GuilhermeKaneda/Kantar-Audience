@@ -1,0 +1,22 @@
+name: 'kantar_audience'
+version: '1.0.0'
+
+profile: 'kantar_audience'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  kantar_audience:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from pandas import date_range
 from io import StringIO
 
+bucket_name = "kantar-audience-raw"
+
 def select_last_date(**context):
     hook = PostgresHook(postgres_conn_id="postgres_conn")  
 
@@ -49,7 +51,7 @@ def insert_db(**context):
 
         csv_content = minio_hook.read_key(
             key=f"{data.strftime('%Y-%m-%d')}.csv",
-            bucket_name="kantar-ibope-raw"
+            bucket_name=bucket_name
         )
 
         csv_buffer = StringIO(csv_content)
@@ -107,6 +109,7 @@ dag = DAG(
     schedule=None,
     start_date=datetime(2026, 1, 1),
     catchup=False,
+    is_paused_upon_creation=False,
 )
 
 select = PythonOperator(

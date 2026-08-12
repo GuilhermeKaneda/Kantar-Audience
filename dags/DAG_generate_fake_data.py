@@ -8,7 +8,10 @@ from datetime import datetime, timedelta
 from pandas import date_range, DataFrame
 import random
 
-init_hour, init_minute = 6, 0
+bucket_name = "kantar-audience-raw" 
+
+init_hour = 6
+init_minute = 0
 range_time = []
 
 while init_hour < 30:
@@ -38,8 +41,8 @@ HORAS = {"06": 0.04, "07": 0.06, "08": 0.08, "09": 0.10, "10": 0.11, "11": 0.14,
          "18": 0.21, "19": 0.27, "20": 0.34, "21": 0.40, "22": 0.29, "23": 0.17,
          "24": 0.09, "25": 0.05, "26": 0.03, "27": 0.02, "28": 0.02, "29": 0.02}
 
-WEEK_DAYS = {"Monday": "Segunda-feira", "Tuesday": "Terça-feira", "Wednesday": "Quarta-feira", "Thursday": "Quinta-feira", 
-             "Friday": "Sexta-feira", "Saturday": "Sábado", "Sunday": "Domingo"}
+WEEK_DAYS = {"Monday": 0.70, "Tuesday": 0.85, "Wednesday": 1.00, "Thursday": 1.10, "Friday": 1.30, "Saturday": 1.45, "Sunday": 1.20}
+
 
 # garante que a soma dos targets da dimensão == total
 def distribuir(total, grupo):
@@ -89,6 +92,12 @@ def generate_data(**context):
 
     # hook do MinIO
     hook = S3Hook(aws_conn_id="minio_conn")
+    
+    # Cria o bucket caso ainda não exista 
+    if not hook.check_for_bucket(bucket_name): 
+        print(f"Bucket '{bucket_name}' não existe.")
+        hook.create_bucket(bucket_name) 
+        print(f"Bucket '{bucket_name}' criado com sucesso.")
 
     # gera os dados para cada dia no range de datas
     for data in date_range(init_date, end_date):
@@ -97,7 +106,9 @@ def generate_data(**context):
         for praca, universo in PRACAS.items():
             for minute in MINUTES_RANGE:
                 hora = minute.split(":")[0]
-                ligados = universo * HORAS[hora] * random.uniform(0.85, 1.15)
+                dia_semana = data.day_name()
+
+                ligados = universo * HORAS[hora] * WEEK_DAYS[dia_semana] * random.uniform(0.85, 1.15)
 
                 # cada target de total ligados recebe uma variação aleatória
                 rat_total_ligados = {"Total Indivíduos": ligados}
@@ -141,7 +152,7 @@ def generate_data(**context):
                             "Emissoras": emissora,
                             "Praças": praca,
                             "Datas": data,
-                            "Week Days": data.day_name(),
+                            "Week Days": dia_semana,
                             "Faixas Horárias": minute,
                             "Targets": target,
                             "Rat#": round(rat, 2),
@@ -154,7 +165,7 @@ def generate_data(**context):
                         "Emissoras": "TOTAL LIGADOS",
                         "Praças": praca,
                         "Datas": data,
-                        "Week Days": data.day_name(),
+                        "Week Days": dia_semana,
                         "Faixas Horárias": minute,
                         "Targets": target,
                         "Rat#": round(rat, 2),
@@ -171,7 +182,7 @@ def generate_data(**context):
         hook.load_string(
             string_data=buffer.getvalue(),
             key=f"{data.strftime('%Y-%m-%d')}.csv",
-            bucket_name="kantar-ibope-raw",
+            bucket_name=bucket_name,
             replace=True,
         )
 
@@ -197,7 +208,7 @@ def insert_process_log(**context):
         print(f"Nenhum dado gerado. Nenhum log de processo inserido. init_date: {init_date}, end_date: {end_date}")
 
 dag = DAG(
-    dag_id="generate_fake_data_2",
+    dag_id="generate_fake_data",
     default_args={
         "owner": "airflow",
         "retries": 1,
@@ -206,6 +217,7 @@ dag = DAG(
     schedule="0 6 * * *",
     start_date=datetime(2026, 1, 1),
     catchup=False,
+    is_paused_upon_creation=False,
 )
 
 select = PythonOperator(
