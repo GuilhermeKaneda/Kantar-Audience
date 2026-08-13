@@ -36,7 +36,7 @@ INSERT INTO process_log (
 ) VALUES (
     'generate_audience_data',
     DATE '2026-01-01',
-    DATE '2026-07-01',
+    DATE '2026-06-01',
     'SUCCESS'
 );
 
@@ -49,7 +49,7 @@ INSERT INTO process_log (
 ) VALUES (
     'insert_data_db',
     DATE '2026-01-01',
-    DATE '2026-07-01',
+    DATE '2026-06-01',
     'SUCCESS'
 );
 
