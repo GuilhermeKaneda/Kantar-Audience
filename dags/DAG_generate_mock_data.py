@@ -208,7 +208,7 @@ def insert_process_log(**context):
         print(f"Nenhum dado gerado. Nenhum log de processo inserido. init_date: {init_date}, end_date: {end_date}")
 
 dag = DAG(
-    dag_id="generate_fake_data",
+    dag_id="generate_mock_data",
     default_args={
         "owner": "airflow",
         "retries": 1,
