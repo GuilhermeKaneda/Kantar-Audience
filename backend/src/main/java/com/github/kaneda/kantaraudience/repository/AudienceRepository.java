@@ -2,6 +2,7 @@ package com.github.kaneda.kantaraudience.repository;
 
 import com.github.kaneda.kantaraudience.dto.AvgByBroadcaster;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerDay;
+import com.github.kaneda.kantaraudience.dto.AvgMetricsPerTarget;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerTimeSlot;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerWeekDay;
 import com.github.kaneda.kantaraudience.model.Audience;
@@ -25,7 +26,7 @@ public interface AudienceRepository extends JpaRepository<Audience, AudienceId> 
     @Query("SELECT DISTINCT a.broadcaster FROM Audience a")
     List<String> findDistinctBroadcaster();
 
-    @Query("SELECT DISTINCT a.weekDay FROM Audience a")
+    @Query("SELECT a.weekDay FROM Audience a GROUP BY a.weekDay ORDER BY MIN(a.weekNumber)")
     List<String> findDistinctWeekDay();
 
     @Query("""
@@ -34,6 +35,7 @@ public interface AudienceRepository extends JpaRepository<Audience, AudienceId> 
         WHERE a.date BETWEEN :startDate AND :endDate
         AND (:broadcaster IS NULL OR a.broadcaster IN :broadcaster)
         AND (:market IS NULL OR a.market IN :market)
+        AND a.target = 'Total Indivíduos'
         GROUP BY a.broadcaster
     """)
     List<AvgByBroadcaster> findAvgRatingAndShareByBroadcaster(String[] broadcaster, String[] market, LocalDate startDate, LocalDate endDate);
@@ -44,6 +46,7 @@ public interface AudienceRepository extends JpaRepository<Audience, AudienceId> 
         WHERE a.date BETWEEN :startDate AND :endDate
         AND (:broadcaster IS NULL OR a.broadcaster IN :broadcaster)
         AND (:market IS NULL OR a.market IN :market)
+        AND a.target = 'Total Indivíduos'
         GROUP BY a.broadcaster, a.date
         ORDER BY a.date
     """)
@@ -55,6 +58,7 @@ public interface AudienceRepository extends JpaRepository<Audience, AudienceId> 
         WHERE a.date BETWEEN :startDate AND :endDate
         AND (:broadcaster IS NULL OR a.broadcaster IN :broadcaster)
         AND (:market IS NULL OR a.market IN :market)
+        AND a.target = 'Total Indivíduos'
         GROUP BY a.timeSlot, a.broadcaster
         ORDER BY a.timeSlot
     """)
@@ -67,7 +71,21 @@ public interface AudienceRepository extends JpaRepository<Audience, AudienceId> 
         AND (:broadcaster IS NULL OR a.broadcaster IN :broadcaster)
         AND (:market IS NULL OR a.market IN :market)
         AND (:weekDay IS NULL OR a.weekDay IN :weekDay)
-        GROUP BY a.weekDay, a.broadcaster
+        AND a.target = 'Total Indivíduos'
+        GROUP BY a.weekDay, a.broadcaster, a.weekNumber
+        ORDER BY a.weekNumber
     """)
     List<AvgMetricsPerWeekDay> findAvgRatingAndSharePerWeekDay(String[] broadcaster, String[] market, String[] weekDay, LocalDate startDate, LocalDate endDate);
+
+    @Query("""
+        SELECT a.broadcaster, a.target, a.targetGroup, AVG(a.broadcasterRating), SUM(a.broadcasterRating) / SUM(a.totalRating) * 100
+        FROM Audience a
+        WHERE a.date BETWEEN :startDate AND :endDate
+        AND (:broadcaster IS NULL OR a.broadcaster IN :broadcaster)
+        AND (:market IS NULL OR a.market IN :market)
+        AND a.target != 'Total Indivíduos'
+        GROUP BY a.broadcaster, a.target, a.targetGroup
+        ORDER BY a.target
+    """)
+    List<AvgMetricsPerTarget> findAvgRatingAndSharePerTarget(String[] broadcaster, String[] market, LocalDate startDate, LocalDate endDate);
 }

@@ -10,6 +10,7 @@ models:
         - market
         - date
         - time_slot
+        - target
     columns:
       - name: broadcaster
         tests:
@@ -20,7 +21,30 @@ models:
       - name: date
         tests:
           - not_null
+      - name: week_day
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
+      - name: week_day_number
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7]
       - name: time_slot
+        tests:
+          - not_null
+      - name: target
+        tests:
+          - not_null
+      - name: target_group
+        tests:
+          - accepted_values:
+              values: ['Gênero', 'Faixa Etária', 'Classe Social', 'Geral']
+      - name: broadcaster_rating
+        tests:
+          - not_null
+      - name: total_rating
         tests:
           - not_null
       - name: share

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.github.kaneda.kantaraudience.repository.AudienceRepository;
 import com.github.kaneda.kantaraudience.dto.AvgByBroadcaster;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerDay;
+import com.github.kaneda.kantaraudience.dto.AvgMetricsPerTarget;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerTimeSlot;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerWeekDay;
 import com.github.kaneda.kantaraudience.model.Audience;
@@ -58,5 +59,10 @@ public class AudienceService {
     @Cacheable("avgRatingAndSharePerWeekDay")
     public List<AvgMetricsPerWeekDay> findAvgRatingAndSharePerWeekDay(String[] broadcaster, String[] market, String[] weekDay, LocalDate startDate, LocalDate endDate) {
         return repository.findAvgRatingAndSharePerWeekDay(broadcaster, market, weekDay, startDate, endDate);
+    }
+
+    @Cacheable("avgRatingAndSharePerTarget")
+    public List<AvgMetricsPerTarget> findAvgRatingAndSharePerTarget(String[] broadcaster, String[] market, LocalDate startDate, LocalDate endDate) {
+        return repository.findAvgRatingAndSharePerTarget(broadcaster, market, startDate, endDate);
     }
 }

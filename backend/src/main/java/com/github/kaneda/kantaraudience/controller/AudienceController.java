@@ -2,6 +2,7 @@ package com.github.kaneda.kantaraudience.controller;
 
 import com.github.kaneda.kantaraudience.dto.AvgByBroadcaster;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerDay;
+import com.github.kaneda.kantaraudience.dto.AvgMetricsPerTarget;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerTimeSlot;
 import com.github.kaneda.kantaraudience.dto.AvgMetricsPerWeekDay;
 import com.github.kaneda.kantaraudience.model.Audience;
@@ -86,5 +87,15 @@ public class AudienceController {
         @RequestParam(required = false) String[] weekDay
     ) {
         return ResponseEntity.ok(service.findAvgRatingAndSharePerWeekDay(broadcaster, market, weekDay, startDate, endDate));
+    }
+
+    @GetMapping("avgratingandsharepertarget")
+    public ResponseEntity<List<AvgMetricsPerTarget>> findAvgRatingAndSharePerTarget(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        @RequestParam(required = false) String[] broadcaster,
+        @RequestParam(required = false) String[] market
+    ) {
+        return ResponseEntity.ok(service.findAvgRatingAndSharePerTarget(broadcaster, market, startDate, endDate));
     }
 }

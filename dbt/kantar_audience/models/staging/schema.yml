@@ -9,17 +9,47 @@ sources:
 
 models:
   - name: stg_kantar_audience
-    description: "Staging da audiência bruta do Kantar, com colunas padronizadas e tipadas."
+    description: "Staging da audiência bruta, com colunas padronizadas, traduzidas e tipadas."
     columns:
       - name: broadcaster
-        description: "Nome da emissora ou 'TOTAL LIGADOS' como referência."
+        description: "Nome da emissora."
         tests:
           - not_null
-      - name: rating_pct
-        description: "Rat# (audiência absoluta) do target naquela faixa horária."
+      - name: market
+        description: "Praça."
         tests:
           - not_null
       - name: date
         description: "Data da medição."
+        tests:
+          - not_null
+      - name: week_day
+        description: "Dia da semana em português."
+        tests:
+          - not_null
+      - name: week_day_number
+        description: "Número do dia da semana (1 = segunda-feira, 7 = domingo)."
+        tests:
+          - not_null
+      - name: time_slot
+        description: "Intervalo de 15 minutos."
+        tests:
+          - not_null
+      - name: target
+        description: "Nome do público-alvo."
+        tests:
+          - not_null
+      - name: target_group
+        description: "Grupo do público-alvo."
+      - name: rating_pct
+        description: "Audiência absoluta."
+        tests:
+          - not_null
+      - name: share_pct
+        description: "Share sobre o total de ligados."
+        tests:
+          - not_null
+      - name: loaded_at
+        description: "Timestamp de execução."
         tests:
           - not_null

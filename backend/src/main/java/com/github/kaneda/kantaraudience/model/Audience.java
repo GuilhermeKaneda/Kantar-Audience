@@ -36,9 +36,18 @@ public class Audience {
     @Column(name = "time_slot", insertable=false, updatable=false)
     private String timeSlot;
 
+    @Column(name = "target", insertable=false, updatable=false)
+    private String target;
+
     // colunas que NÃO estão no EmbeddedId ficam normais
     @Column(name = "week_day")
     private String weekDay;
+
+    @Column(name = "week_day_number")
+    private Integer weekNumber;
+
+    @Column(name = "target_group")
+    private String targetGroup;
 
     @Column(name = "broadcaster_rating")
     private Double broadcasterRating;

@@ -30,6 +30,9 @@ public class AudienceId implements Serializable {
     @Column(name = "time_slot")
     private String timeSlot;
 
+    @Column(name = "target")
+    private String target;
+
     // equals, hashCode e getters obrigatórios
     @Override
     public boolean equals(Object o) {
@@ -39,11 +42,12 @@ public class AudienceId implements Serializable {
         return Objects.equals(broadcaster, that.broadcaster)
                 && Objects.equals(market, that.market)
                 && Objects.equals(date, that.date)
-                && Objects.equals(timeSlot, that.timeSlot);
+                && Objects.equals(timeSlot, that.timeSlot)
+                && Objects.equals(target, that.target);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(broadcaster, market, date, timeSlot);
+        return Objects.hash(broadcaster, market, date, timeSlot, target);
     }
 }

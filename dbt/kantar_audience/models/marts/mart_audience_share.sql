@@ -1,12 +1,12 @@
 {{
     config(
         materialized='incremental',
-        unique_key=['broadcaster', 'market', 'date', 'time_slot'],
+        unique_key=['broadcaster', 'market', 'date', 'time_slot', 'target'],
         incremental_strategy='delete+insert',
         indexes=[
             {'columns': ['date'], 'type': 'btree'},
             {'columns': ['broadcaster', 'date'], 'type': 'btree'},
-            {'columns': ['broadcaster', 'market'], 'type': 'btree'},
+            {'columns': ['broadcaster', 'market', 'target'], 'type': 'btree'},
         ]
     )
 }}
@@ -15,8 +15,7 @@
 with broadcaster as (
     select *
     from {{ ref('stg_kantar_audience') }}
-    where target = 'Total Indivíduos'
-      and broadcaster != 'TOTAL LIGADOS'
+    where broadcaster != 'TOTAL LIGADOS'
 
     {% if is_incremental() %}
         -- coalesce para quando a tabela estiver vazia e ser date > NULL, o que dá erro
@@ -28,8 +27,7 @@ with broadcaster as (
 total_tuned as (
     select *
     from {{ ref('stg_kantar_audience') }}
-    where target = 'Total Indivíduos'
-      and broadcaster = 'TOTAL LIGADOS'
+    where broadcaster = 'TOTAL LIGADOS'
 
     {% if is_incremental() %}
         -- coalesce para quando a tabela estiver vazia e ser date > NULL, o que dá erro
@@ -42,7 +40,10 @@ select
     b.market,
     b.date,
     b.week_day,
+    b.week_day_number,
     b.time_slot,
+    b.target,
+    b.target_group,
     b.rating_pct as broadcaster_rating,
     t.rating_pct as total_rating,
     round(b.rating_pct / t.rating_pct * 100, 2) as share
@@ -51,4 +52,5 @@ join total_tuned t
     on b.date = t.date
     and b.market = t.market
     and b.time_slot = t.time_slot
+    and b.target = t.target
 order by b.broadcaster, b.date, b.time_slot
