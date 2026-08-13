@@ -32,6 +32,14 @@ export async function getAvgRatingAndSharePerWeekDay(filters) {
   return data;
 }
 
+export async function getAvgRatingAndSharePerTarget(filters) {
+  const { data } = await api.get("/audience/avgratingandsharepertarget", {
+    params: filters,
+  });
+
+  return data;
+}
+
 export async function getDistinctMarkets() {
   const { data } = await api.get("/audience/market");
 

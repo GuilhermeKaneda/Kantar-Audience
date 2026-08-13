@@ -24,11 +24,10 @@ export default function MultiSelect({ label, options, selected, onChange }) {
 
         let values = selected.filter((v) => v !== "Todos");
 
-        if (values.includes(value)) {
+        if (values.includes(value))
             values = values.filter((v) => v !== value);
-        } else {
+        else
             values = [...values, value];
-        }
 
         onChange(values.length ? values : ["Todos"]);
     }
@@ -38,7 +37,7 @@ export default function MultiSelect({ label, options, selected, onChange }) {
             return "Todos";
         if (selected.length === 1)
             return selected[0];
-        return `${selected.length - 1} selecionados`;
+        return `${selected.length} selecionados`;
     })();
 
     return (

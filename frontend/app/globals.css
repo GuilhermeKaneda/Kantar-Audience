@@ -364,7 +364,7 @@ body {
   margin-bottom: 10px;
 }
 
-.pie-charts-row {
+.stack-charts-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;

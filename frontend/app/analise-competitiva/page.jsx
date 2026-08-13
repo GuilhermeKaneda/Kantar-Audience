@@ -60,6 +60,14 @@ export default function VisaoGeralPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  let activeBroadcasters;
+
+  // variavel para selecionar apenas os broadcasters ativos no filtro, para os charts
+  if (filters.broadcaster.includes("Todos"))
+    activeBroadcasters = broadcasters;
+  else
+    activeBroadcasters = broadcasters.filter((b) => filters.broadcaster.includes(b.nome));
+
   useEffect(() => {
     getDistinctMarkets().then(setMarkets);
 
@@ -119,7 +127,7 @@ export default function VisaoGeralPage() {
               title="Evolução da Audiência"
               data={charts.rating}
               dataKey="timeSlot"
-              broadcasters={broadcasters}
+              broadcasters={activeBroadcasters}
               yFormatter={(v) => `${(v / 1000).toFixed(1)}k`}
             />
 
@@ -135,7 +143,7 @@ export default function VisaoGeralPage() {
               title="Evolução do Share"
               data={charts.share}
               dataKey="timeSlot"
-              broadcasters={broadcasters}
+              broadcasters={activeBroadcasters}
               yFormatter={(v) => `${v.toFixed(1)}%`}
             />
 

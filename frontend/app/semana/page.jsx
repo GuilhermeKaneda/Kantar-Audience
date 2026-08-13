@@ -66,6 +66,14 @@ export default function SemanaPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  let activeBroadcasters;
+
+  // variavel para selecionar apenas os broadcasters ativos no filtro, para os charts
+  if (filters.broadcaster.includes("Todos"))
+    activeBroadcasters = broadcasters;
+  else
+    activeBroadcasters = broadcasters.filter((b) => filters.broadcaster.includes(b.nome));
+
   useEffect(() => {
     getDistinctMarkets().then(setMarkets);
 
@@ -133,7 +141,7 @@ export default function SemanaPage() {
               title="Audiência por dia da semana"
               data={charts.rating}
               dataKey="weekDay"
-              broadcasters={broadcasters}
+              broadcasters={activeBroadcasters}
               yFormatter={(v) => `${(v / 1000).toFixed(1)}k`}
             />
 
@@ -149,7 +157,7 @@ export default function SemanaPage() {
               title="Share por dia da semana"
               data={charts.share}
               dataKey="weekDay"
-              broadcasters={broadcasters}
+              broadcasters={activeBroadcasters}
               yFormatter={(v) => `${v.toFixed(1)}%`}
             />
 

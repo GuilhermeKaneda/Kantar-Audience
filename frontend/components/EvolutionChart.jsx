@@ -29,7 +29,7 @@ export default function EvolutionChart({
           <XAxis dataKey={dataKey} />
           <YAxis tickFormatter={yFormatter} />
 
-          <Tooltip formatter={yFormatter} />
+          <Tooltip contentStyle={{ background: "#171b24", border: "1px solid #2a2f3a", borderRadius: 8 }} formatter={yFormatter} />
 
           <Legend />
 
