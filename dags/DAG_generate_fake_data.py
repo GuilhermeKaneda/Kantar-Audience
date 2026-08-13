@@ -32,7 +32,7 @@ EMISSORAS = {"Emissora 1": 0.12, "Emissora 2": 0.35, "Emissora 3": 0.25, "Emisso
 
 TARGETS = {
     "genero": {"Masculino": 0.44, "Feminino": 0.56},
-    "idade": {"4-11 anos": 0.06, "12-17 anos": 0.06, "18-24 anos": 0.07, "25-34 anos": 0.18, "35-49 anos": 0.21, "50+": 0.42},
+    "idade": {"04-11 anos": 0.06, "12-17 anos": 0.06, "18-24 anos": 0.07, "25-34 anos": 0.18, "35-49 anos": 0.21, "50+": 0.42},
     "classe": {"AB": 0.23, "C": 0.52, "DE": 0.25}
 }
 
