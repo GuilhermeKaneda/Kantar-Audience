@@ -2,8 +2,6 @@ x-airflow-common: &airflow-common
   build:
     context: .
     dockerfile: Dockerfile
-  env_file:
-    - ${ENV_FILE_PATH:-.env}
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
