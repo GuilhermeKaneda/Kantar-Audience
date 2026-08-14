@@ -4,7 +4,7 @@ Pipeline de dados de audiência inspirado em uma tabela da Kantar IBOPE. Gera da
 
 ## Arquitetura
 
-![Arquitetura do projeto](./diagram.png)
+![Arquitetura do projeto](./anexos/diagram.png)
 
 ### Fluxo
 
@@ -96,3 +96,7 @@ Praticamente todo o projeto já tem valores padrão. Caso queira customizar, bas
 ### Postgres
 
 O `init.sql` cria a tabela `process_log`, que controla o período inicial de geração de dados. Para aumentar ou diminuir esse período, basta alterar o `end_date` dos INSERTs no arquivo.
+
+## Preview
+
+<video src="./anexos/preview.mp4" controls width="100%"></video>
