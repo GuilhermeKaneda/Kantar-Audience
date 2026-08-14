@@ -99,4 +99,4 @@ O `init.sql` cria a tabela `process_log`, que controla o período inicial de ger
 
 ## Preview
 
-<video src="./anexos/preview.mp4" controls width="100%"></video>
+[<video src="./anexos/preview.mp4" controls width="100%"></video>](https://github.com/user-attachments/assets/224748b0-e111-4b5f-863d-1e3a55617d99)
