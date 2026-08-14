@@ -9,7 +9,7 @@ Pipeline de dados de audiência inspirado em uma tabela da Kantar IBOPE. Gera da
 ### Fluxo
 
 1. **`DAG_generate_mock_data`** gera dados fake de audiência e grava os arquivos brutos no bucket (MinIO), em `kantar_ibope_raw`
-2. **`DAG_insert_db_raw`** lê os arquivos do bucket e insere na tabela de dados brutos do Postgres, `audience_15min_raw`
+2. **`DAG_insert_data_db`** lê os arquivos do bucket e insere na tabela de dados brutos do Postgres, `audience_15min_raw`
 3. **`DAG_execute_dbt`** dispara as transformações do **dbt**:
    - `staging` → `stg_kantar_audience`: limpeza e tipagem dos dados brutos
    - `mart` → `mart_audience_share`: agregações para share de audiência
@@ -37,7 +37,7 @@ Pipeline de dados de audiência inspirado em uma tabela da Kantar IBOPE. Gera da
 ├── requirements.txt
 │
 ├── dags/
-│   ├── DAG_generate_fake_data.py
+│   ├── DAG_generate_mock_data.py
 │   ├── DAG_insert_data_db.py
 │   └── DAG_execute_dbt.py
 │
